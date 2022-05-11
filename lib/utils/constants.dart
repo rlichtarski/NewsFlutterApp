@@ -1,3 +1,3 @@
 
-final String adminEmail = 'email@email.com';
+final String adminEmail = 'admin@admin.com';
 

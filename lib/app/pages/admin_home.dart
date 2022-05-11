@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/app/pages/admin_add_article.dart';
 import 'package:news_app/app/providers.dart';
 
 class AdminHome extends ConsumerWidget {
@@ -14,6 +15,12 @@ class AdminHome extends ConsumerWidget {
           icon: const Icon(Icons.logout),
           onPressed: () => ref.read(firebaseAuthProvider).signOut(),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (() => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const AdminAddProductPage())
+        )),
+        child: const Icon(Icons.add),
       ),
     );
   }
