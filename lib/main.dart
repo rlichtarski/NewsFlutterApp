@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/app/pages/admin_home.dart';
 import 'package:news_app/app/pages/auth/sign_in_page.dart';
 import 'package:news_app/app/pages/auth_widget.dart';
 import 'package:news_app/app/providers.dart';
@@ -20,10 +21,12 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue
       ),
       home: AuthWidget(
+        adminPanelBuilder: (context) => const AdminHome(),
         nonSignedInBuilder: (context) => const SignInPage(),
         signedInBuilder: (context) => Scaffold(
           body: Center(
