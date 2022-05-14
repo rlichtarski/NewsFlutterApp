@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/utils/constants.dart';
 
 class FirestoreService {
 
@@ -9,12 +10,30 @@ class FirestoreService {
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<void> addArticle(Article article) async => await firestore
-    .collection('articles')
-    .add(article.toMap())
-    .then((value) => print(value))
-    .catchError((onError) => print('Error $onError'));
+  Future<void> addArticle(Article article) async {
+    final docId = firestore
+      .collection(articlesCol)
+      .doc()
+      .id;
 
+    await firestore
+      .collection(articlesCol)
+      .doc(docId)
+      .set(article.toMap(docId));
+  }
+
+  Stream<List<Article>> getArticles() => firestore
+    .collection(articlesCol)
+    .snapshots()
+    .map((snapshot) => snapshot.docs.map((doc) {
+      final docData = doc.data();
+      return Article.fromMap(docData);
+    }).toList());
+
+  Future<void> deleteArticle(String id) async => await firestore
+    .collection(articlesCol)
+    .doc(id)
+    .delete();
 
 }
 

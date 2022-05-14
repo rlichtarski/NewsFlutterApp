@@ -3,10 +3,17 @@ class Article {
   final String title;
   final String description;
   final String imageUrl;
+  final String? id;
 
-  Article({required this.title, required this.description, required this.imageUrl});
+  Article({
+    this.id,
+    required this.title, 
+    required this.description, 
+    required this.imageUrl,
+  });
 
-  Map<String, dynamic> toMap() => {
+  Map<String, dynamic> toMap(String docId) => {
+    'id': docId,
     'title': title,
     'description': description,
     'imageUrl': imageUrl,
@@ -14,6 +21,7 @@ class Article {
 
   factory Article.fromMap(Map<String, dynamic> map) => 
     Article(
+      id: map['id'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
