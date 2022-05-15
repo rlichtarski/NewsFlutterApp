@@ -17,7 +17,7 @@ class StorageService {
       final uploadTask = await ref.putFile(File(filePath));
       return await uploadTask.ref.getDownloadURL();
     }catch(e) {
-      return 'an error has occured. $e';
+      return 'an error has occured.';
     }
   }
 

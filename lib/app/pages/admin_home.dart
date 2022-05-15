@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/app/pages/admin_add_article.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/utils/constants.dart';
 
 class AdminHome extends ConsumerWidget {
   const AdminHome({Key? key}) : super(key: key);
@@ -31,8 +32,17 @@ class AdminHome extends ConsumerWidget {
                     icon: const Icon(Icons.delete),
                     onPressed: () => ref.read(databaseProvider)!.deleteArticle(article.id!),
                   ),
-                  title: Text(article.title),
-                  subtitle: Text(article.description),
+                  title: Text(
+                    article.title,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  subtitle: Text(
+                    article.description,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: article.imageUrl != uploadImageError 
+                    ? Image.network(article.imageUrl) 
+                    : const Text('No image found!'),
                 );
               }
             );
