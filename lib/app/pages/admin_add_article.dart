@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,11 +86,15 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddProductPage> {
 
     final url = await storage.uploadImage(imagePicker.path);
 
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('dd.MM.yyyy').format(now);
+
     await firestoreDB.addArticle(
       Article(
         title: titleController.text, 
         description: descriptionController.text, 
-        imageUrl: url
+        imageUrl: url,
+        timestamp: formattedDate
       )
     );
 

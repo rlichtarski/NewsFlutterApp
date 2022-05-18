@@ -1,8 +1,6 @@
-
-
 import 'dart:io';
-
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:news_app/utils/constants.dart';
 
 class StorageService {
   final String uid;
@@ -17,7 +15,7 @@ class StorageService {
       final uploadTask = await ref.putFile(File(filePath));
       return await uploadTask.ref.getDownloadURL();
     }catch(e) {
-      return 'an error has occured.';
+      return uploadImageError;
     }
   }
 

@@ -17,7 +17,7 @@ final databaseProvider = Provider<FirestoreService?>((ref) {
   return uid != null ? FirestoreService(uid: uid) : null;
 });
 
-final pickImageProvider = StateProvider<XFile?>((_) => null);
+final pickImageProvider = StateProvider.autoDispose<XFile?>((_) => null);
 
 final storageProvider = Provider<StorageService?>((ref) {
   final auth = ref.watch(authStateChangesProvider);
