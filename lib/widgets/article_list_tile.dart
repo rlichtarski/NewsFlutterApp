@@ -1,5 +1,6 @@
 
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -44,10 +45,20 @@ class ArticleListTile extends StatelessWidget {
           children: [
             article.imageUrl != uploadImageError 
               ? ClipRRect(
-                  child: Image.network(
-                    article.imageUrl,
+                  child: CachedNetworkImage(
+                    imageUrl: article.imageUrl,
+                    key: UniqueKey(),
                     height: 80,
+                    width: 80,
                     fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(color: Colors.black12,),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.black12,
+                      child: const Icon(
+                        Icons.error,
+                        color: Colors.red,
+                      ),
+                    ),
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ) 
