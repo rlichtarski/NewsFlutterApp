@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:news_app/app/pages/admin_add_article.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/constants.dart';
+import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/article_list_tile.dart';
 
 class AdminHome extends ConsumerWidget {
@@ -24,6 +26,23 @@ class AdminHome extends ConsumerWidget {
         builder: (context, snapshot) {
           if(snapshot.connectionState == ConnectionState.active
            && snapshot.data != null) {
+            if(snapshot.data!.isEmpty) {
+              return Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      'No articles yet...'
+                    ),
+                    Lottie.asset(
+                      'assets/anim/empty.json',
+                      repeat: false,
+                      width: 200
+                    ),
+                  ],
+                ),
+              );
+            }
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
@@ -31,7 +50,17 @@ class AdminHome extends ConsumerWidget {
                 return ArticleListTile(
                   article: article,
                   onDelete: () {
-
+                    ref
+                      .read(databaseProvider)!
+                      .deleteArticle(article.id!);
+                    openIconSnackBar(
+                      context, 
+                      'Deleted the article', 
+                      const Icon(
+                        Icons.check,
+                        color: Colors.white,
+                      )
+                    );
                   },
                   onPressed: () {
                     
@@ -39,8 +68,8 @@ class AdminHome extends ConsumerWidget {
                 );
               }
             );
-           }
-           return const Center(child: CircularProgressIndicator());
+          }
+          return const Center(child: CircularProgressIndicator());
         },
       ),
       floatingActionButton: FloatingActionButton(

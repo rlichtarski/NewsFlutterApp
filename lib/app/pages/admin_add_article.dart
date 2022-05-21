@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 
 class AdminAddProductPage extends ConsumerStatefulWidget {
@@ -95,6 +96,15 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddProductPage> {
         description: descriptionController.text, 
         imageUrl: url,
         timestamp: formattedDate
+      )
+    );
+
+    openIconSnackBar(
+      context, 
+      'Added the article', 
+      const Icon(
+        Icons.check,
+        color: Colors.white,
       )
     );
 
