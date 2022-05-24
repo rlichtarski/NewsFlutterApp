@@ -3,6 +3,7 @@ class Article {
   final String title;
   final String description;
   final String imageUrl;
+  final String timestamp;
   final String? id;
 
   Article({
@@ -10,6 +11,7 @@ class Article {
     required this.title, 
     required this.description, 
     required this.imageUrl,
+    required this.timestamp
   });
 
   Map<String, dynamic> toMap(String docId) => {
@@ -17,6 +19,7 @@ class Article {
     'title': title,
     'description': description,
     'imageUrl': imageUrl,
+    'timestamp': timestamp,
   };
 
   factory Article.fromMap(Map<String, dynamic> map) => 
@@ -25,6 +28,7 @@ class Article {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
+      timestamp: map['timestamp'] ?? '',
     );
 
 }
