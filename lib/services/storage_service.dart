@@ -19,4 +19,12 @@ class StorageService {
     }
   }
 
+  Future<void> deleteImage(String filePath) async {
+    try {
+      await storage.refFromURL(filePath).delete();
+    } catch(e) {
+      //image delete error
+    }
+  }
+
 }
