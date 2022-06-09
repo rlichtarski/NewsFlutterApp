@@ -58,22 +58,22 @@ class ArticleListTile extends StatelessWidget {
             children: [
               article.imageUrl != uploadImageError 
                 ? ClipRRect(
-                    child: CachedNetworkImage(
-                      imageUrl: article.imageUrl,
-                      key: UniqueKey(),
-                      height: 80,
-                      width: 80,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(color: Colors.black12,),
-                      errorWidget: (context, url, error) => Container(
-                        color: Colors.black12,
-                        child: const Icon(
-                          Icons.error,
-                          color: Colors.red,
-                        ),
+                  child: CachedNetworkImage(
+                    imageUrl: article.imageUrl,
+                    key: UniqueKey(),
+                    height: 80,
+                    width: 80,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(color: Colors.black12,),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.black12,
+                      child: const Icon(
+                        Icons.error,
+                        color: Colors.red,
                       ),
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                   ) 
                 : const Text('No image found!'),
               const SizedBox(width: 15,),

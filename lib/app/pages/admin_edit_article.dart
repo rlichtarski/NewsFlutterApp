@@ -9,23 +9,27 @@ import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 
-class AdminAddArticlePage extends ConsumerStatefulWidget {
-  const AdminAddArticlePage({Key? key}) : super(key: key);
+class AdminEditArticlePage extends ConsumerStatefulWidget {
+  const AdminEditArticlePage({Key? key, required this.article}) : super(key: key);
   
+  final Article article;
+
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _AdminAddArticlePageState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _AdminEditArticlePageState();
 }
 
-class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
+class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    setTextControllers(widget.article);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add an Article'),
+        title: const Text('Edit the Article'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -48,7 +52,20 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
                 builder: (context, ref, child) {
                   final image = ref.watch(pickImageProvider);
                   return image == null 
-                    ? const Text('No image selected.') 
+                    ? CachedNetworkImage(
+                      imageUrl: widget.article.imageUrl,
+                      key: UniqueKey(),
+                      height: 300,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(color: Colors.black12,),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.black12,
+                        child: const Icon(
+                          Icons.error,
+                          color: Colors.red,
+                        ),
+                      ),
+                    ) 
                     : Image.file(
                       File(image.path),
                       height: 300,
@@ -69,9 +86,9 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
               const SizedBox(height: 10,),
               ElevatedButton(
                 onPressed: () { 
-                  _addArticle(); 
+                  _editArticle(); 
                 }, 
-                child: const Text('Add the article')
+                child: const Text('Edit the article')
               ),
             ],
           ),
@@ -80,7 +97,8 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
     );
   }
 
-  void _addArticle() async {
+  void _editArticle() async {
+    print('called editArticle');
     final firestoreDB = ref.read(databaseProvider);
     final imagePicker = ref.read(pickImageProvider);
     final storage = ref.read(storageProvider);
@@ -92,18 +110,19 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd.MM.yyyy').format(now);
 
-    await firestoreDB.addArticle(
+    await firestoreDB.editArticle(
       Article(
         title: titleController.text, 
         description: descriptionController.text, 
         imageUrl: url,
         timestamp: formattedDate,
+        id: widget.article.id
       )
     );
 
     openIconSnackBar(
       context, 
-      'Added the article', 
+      'Edited the article', 
       const Icon(
         Icons.check,
         color: Colors.white,
@@ -111,6 +130,14 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
     );
 
     Navigator.pop(context);
+  }
+  
+  void setTextControllers(Article? article) {
+    if(article != null) {
+      titleController.text = article.title;
+      descriptionController.text = article.description;
+      
+    }
   }
 
 }

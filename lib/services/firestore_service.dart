@@ -22,6 +22,13 @@ class FirestoreService {
       .set(article.toMap(docId));
   }
 
+  Future<void> editArticle(Article article) async {
+    await firestore
+      .collection(articlesCol)
+      .doc(article.id)
+      .update(article.toMap(article.id!));
+  }
+
   Stream<List<Article>> getArticles() => firestore
     .collection(articlesCol)
     .snapshots()
