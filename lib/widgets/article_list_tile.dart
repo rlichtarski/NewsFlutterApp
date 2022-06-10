@@ -59,7 +59,7 @@ class ArticleListTile extends StatelessWidget {
               article.imageUrl != uploadImageError 
                 ? ClipRRect(
                   child: CachedNetworkImage(
-                    imageUrl: article.imageUrl,
+                    imageUrl: article.imageUrl!,
                     key: UniqueKey(),
                     height: 80,
                     width: 80,

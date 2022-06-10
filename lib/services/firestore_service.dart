@@ -23,10 +23,15 @@ class FirestoreService {
   }
 
   Future<void> editArticle(Article article) async {
-    await firestore
-      .collection(articlesCol)
-      .doc(article.id)
-      .update(article.toMap(article.id!));
+    article.imageUrl == null 
+      ? await firestore
+        .collection(articlesCol)
+        .doc(article.id)
+        .update(article.toMapNoImage(article.id!))
+      : await firestore
+        .collection(articlesCol)
+        .doc(article.id)
+        .update(article.toMap(article.id!));
   }
 
   Stream<List<Article>> getArticles() => firestore

@@ -53,7 +53,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
                   final image = ref.watch(pickImageProvider);
                   return image == null 
                     ? CachedNetworkImage(
-                      imageUrl: widget.article.imageUrl,
+                      imageUrl: widget.article.imageUrl!,
                       key: UniqueKey(),
                       height: 300,
                       fit: BoxFit.cover,
@@ -98,27 +98,39 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
   }
 
   void _editArticle() async {
-    print('called editArticle');
     final firestoreDB = ref.read(databaseProvider);
     final imagePicker = ref.read(pickImageProvider);
     final storage = ref.read(storageProvider);
 
-    if(firestoreDB == null || imagePicker == null || storage == null) return;
-
-    final url = await storage.uploadImage(imagePicker.path);
+    if(firestoreDB == null || storage == null) return;
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd.MM.yyyy').format(now);
 
-    await firestoreDB.editArticle(
-      Article(
-        title: titleController.text, 
-        description: descriptionController.text, 
-        imageUrl: url,
-        timestamp: formattedDate,
-        id: widget.article.id
-      )
-    );
+    if(imagePicker != null) {
+      final url = await storage.uploadImage(imagePicker.path);
+
+      await firestoreDB.editArticle(
+        Article(
+          title: titleController.text, 
+          description: descriptionController.text, 
+          imageUrl: url,
+          timestamp: formattedDate,
+          id: widget.article.id
+        )
+      );
+    } else {
+      await firestoreDB.editArticle(
+        Article(
+          title: titleController.text, 
+          description: descriptionController.text, 
+          timestamp: formattedDate,
+          id: widget.article.id
+        )
+      );
+    }
+
+    
 
     openIconSnackBar(
       context, 

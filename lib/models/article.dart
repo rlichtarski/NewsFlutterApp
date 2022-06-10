@@ -2,7 +2,7 @@ class Article {
 
   final String title;
   final String description;
-  final String imageUrl;
+  final String? imageUrl;
   final String timestamp;
   final String? id;
 
@@ -10,7 +10,7 @@ class Article {
     this.id,
     required this.title, 
     required this.description, 
-    required this.imageUrl,
+    this.imageUrl,
     required this.timestamp
   });
 
@@ -19,6 +19,13 @@ class Article {
     'title': title,
     'description': description,
     'imageUrl': imageUrl,
+    'timestamp': timestamp,
+  };
+
+  Map<String, dynamic> toMapNoImage(String docId) => {
+    'id': docId,
+    'title': title,
+    'description': description,
     'timestamp': timestamp,
   };
 

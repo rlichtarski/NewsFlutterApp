@@ -56,7 +56,7 @@ class AdminHome extends ConsumerWidget {
                       .deleteArticle(article.id!);
                     ref
                       .read(storageProvider)!
-                      .deleteImage(article.imageUrl);
+                      .deleteImage(article.imageUrl!);
                     openIconSnackBar(
                       context, 
                       'Deleted the article', 
