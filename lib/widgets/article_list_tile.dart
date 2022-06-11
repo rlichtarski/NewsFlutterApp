@@ -68,8 +68,8 @@ class ArticleListTile extends StatelessWidget {
                     errorWidget: (context, url, error) => Container(
                       color: Colors.black12,
                       child: const Icon(
-                        Icons.error,
-                        color: Colors.red,
+                        Icons.broken_image,
+                        color: Colors.black,
                       ),
                     ),
                   ),

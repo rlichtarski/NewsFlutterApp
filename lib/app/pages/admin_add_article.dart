@@ -24,70 +24,73 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Add an Article'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CustomInputField(
-                inputController: titleController, 
-                hintText: "Article's title", 
-                labelText: "Article's title"
-              ),
-              const SizedBox(height: 15),
-              CustomInputField(
-                inputController: descriptionController, 
-                hintText: "Article's description", 
-                labelText: "Article's description"
-              ),
-              const SizedBox(height: 15),
-              Consumer(
-                builder: (context, ref, child) {
-                  final image = ref.watch(pickImageProvider);
-                  return image == null 
-                    ? const Text('No image selected.') 
-                    : Image.file(
+        child: Column(
+          children: [
+            CustomInputField(
+              inputController: titleController, 
+              hintText: "Article's title", 
+              labelText: "Article's title"
+            ),
+            const SizedBox(height: 15),
+            CustomInputField(
+              inputController: descriptionController, 
+              hintText: "Article's description", 
+              labelText: "Article's description"
+            ),
+            const SizedBox(height: 15),
+            Consumer(
+              builder: (context, ref, child) {
+                final image = ref.watch(pickImageProvider);
+                return image == null 
+                  ? const Text('No image selected.') 
+                  : Image.file(
                       File(image.path),
                       height: 300,
                     );
-                },
+              },
+            ),
+            const SizedBox(height: 15),
+            GestureDetector(
+              onTap: () async { 
+                final image = await ImagePicker()
+                  .pickImage(source: ImageSource.gallery);
+                if(image != null) {
+                  ref.watch(pickImageProvider.state).state = image; 
+                }
+              }, 
+              child: const Text(
+                'Pick an image',
+                style: TextStyle(
+                decoration: TextDecoration.underline,
+                fontSize: 20
               ),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () async { 
-                  final image = await ImagePicker()
-                    .pickImage(source: ImageSource.gallery);
-                  if(image != null) {
-                    ref.watch(pickImageProvider.state).state = image; 
-                  }
-                }, 
-                child: const Text('Pick an image')
-              ),
-              const SizedBox(height: 10,),
-              ElevatedButton(
-                onPressed: () { 
-                  ref.read(isLoadingProvider).isLoading(true);
-                  _addArticle(); 
-                }, 
-                child: Consumer(
-                  builder: (context, ref, child) {
-                    final loadingNotifier = ref.watch(isLoadingProvider);
-                    return loadingNotifier.loading 
-                      ? const Padding(
-                        padding:  EdgeInsets.all(6.0),
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                        ),
-                      )
-                      : const Text('Add the article');
-                  },
-                )
-              ),
-            ],
-          ),
+              )
+            ),
+            const Spacer(),
+            Consumer(
+              builder: (context, ref, child) {
+                final loadingNotifier = ref.watch(isLoadingProvider);
+                return loadingNotifier.loading 
+                  ? const Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: CircularProgressIndicator(),
+                  )
+                  : ElevatedButton(
+                    onPressed: () { 
+                      ref.read(isLoadingProvider).isLoading(true);
+                      _addArticle(); 
+                    }, 
+                    child: const Text('Add the article')
+                  );
+              },
+            ),
+          ],
         ),
       ),
     );
@@ -98,21 +101,31 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
     final imagePicker = ref.read(pickImageProvider);
     final storage = ref.read(storageProvider);
 
-    if(firestoreDB == null || imagePicker == null || storage == null) return;
-
-    final url = await storage.uploadImage(imagePicker.path);
+    if(firestoreDB == null || storage == null) return;
 
     DateTime now = DateTime.now();
     String formattedDate = DateFormat('dd.MM.yyyy').format(now);
 
-    await firestoreDB.addArticle(
-      Article(
-        title: titleController.text, 
-        description: descriptionController.text, 
-        imageUrl: url,
-        timestamp: formattedDate,
-      )
-    );
+    if(imagePicker != null) {
+      final url = await storage.uploadImage(imagePicker.path);
+
+      await firestoreDB.addArticle(
+        Article(
+          title: titleController.text, 
+          description: descriptionController.text, 
+          imageUrl: url,
+          timestamp: formattedDate,
+        )
+      );
+    } else {
+      await firestoreDB.addArticle(
+        Article(
+          title: titleController.text, 
+          description: descriptionController.text, 
+          timestamp: formattedDate,
+        )
+      );
+    }
 
     openIconSnackBar(
       context, 

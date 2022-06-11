@@ -16,10 +16,15 @@ class FirestoreService {
       .doc()
       .id;
 
-    await firestore
-      .collection(articlesCol)
-      .doc(docId)
-      .set(article.toMap(docId));
+    article.imageUrl == null ?
+      await firestore
+        .collection(articlesCol)
+        .doc(docId)
+        .set(article.toMapNoImage(docId))
+      : await firestore
+        .collection(articlesCol)
+        .doc(docId)
+        .set(article.toMap(docId));
   }
 
   Future<void> editArticle(Article article) async {
