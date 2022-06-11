@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/services/LoadingNotifier.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 
@@ -86,9 +87,22 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
               const SizedBox(height: 10,),
               ElevatedButton(
                 onPressed: () { 
+                  ref.read(isLoadingProvider).isLoading(true);
                   _editArticle(); 
                 }, 
-                child: const Text('Edit the article')
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final loadingNotifier = ref.watch(isLoadingProvider);
+                    return loadingNotifier.loading 
+                      ? const Padding(
+                        padding:  EdgeInsets.all(6.0),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text('Edit the article');
+                  },
+                )
               ),
             ],
           ),
@@ -129,9 +143,6 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
         )
       );
     }
-
-    
-
     openIconSnackBar(
       context, 
       'Edited the article', 

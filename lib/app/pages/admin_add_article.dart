@@ -69,9 +69,22 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
               const SizedBox(height: 10,),
               ElevatedButton(
                 onPressed: () { 
+                  ref.read(isLoadingProvider).isLoading(true);
                   _addArticle(); 
                 }, 
-                child: const Text('Add the article')
+                child: Consumer(
+                  builder: (context, ref, child) {
+                    final loadingNotifier = ref.watch(isLoadingProvider);
+                    return loadingNotifier.loading 
+                      ? const Padding(
+                        padding:  EdgeInsets.all(6.0),
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text('Add the article');
+                  },
+                )
               ),
             ],
           ),
