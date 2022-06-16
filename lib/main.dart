@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/app/pages/admin_home.dart';
 import 'package:news_app/app/pages/auth/sign_in_page.dart';
 import 'package:news_app/app/pages/auth_widget.dart';
+import 'package:news_app/app/pages/user/user_home.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/firebase_options.dart';
 
@@ -28,20 +29,7 @@ class MyApp extends ConsumerWidget {
       home: AuthWidget(
         adminPanelBuilder: (context) => const AdminHome(),
         nonSignedInBuilder: (context) => const SignInPage(),
-        signedInBuilder: (context) => Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Text('You are signed in!'),
-                ElevatedButton(
-                  onPressed: () => ref.read(firebaseAuthProvider).signOut(), 
-                  child: const Text('logout')
-                ),
-              ],
-            ),
-          ),
-        ),
+        signedInBuilder: (context) => const UserHome(),
       ),
     );
   }
