@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/app/providers.dart';
+import 'package:news_app/widgets/display_articles.dart';
 import 'package:news_app/widgets/main_article.dart';
 import 'package:news_app/widgets/user_top_bar.dart';
 
@@ -31,7 +32,8 @@ class UserHome extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 10,),
-              const MainArticle()
+              const MainArticle(),
+              const Flexible(child: DisplayArticles())
             ],
           ),
         )

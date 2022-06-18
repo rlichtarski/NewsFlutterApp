@@ -8,6 +8,7 @@ import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/constants.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/article_list_tile.dart';
+import 'package:news_app/widgets/empty_widget.dart';
 
 class AdminHome extends ConsumerWidget {
   const AdminHome({Key? key}) : super(key: key);
@@ -28,21 +29,7 @@ class AdminHome extends ConsumerWidget {
           if(snapshot.connectionState == ConnectionState.active
            && snapshot.data != null) {
             if(snapshot.data!.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text(
-                      'No articles yet...'
-                    ),
-                    Lottie.asset(
-                      'assets/anim/empty.json',
-                      repeat: false,
-                      width: 200
-                    ),
-                  ],
-                ),
-              );
+              return const EmptyWidget();
             }
             return ListView.builder(
               itemCount: snapshot.data!.length,

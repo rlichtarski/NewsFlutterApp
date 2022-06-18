@@ -6,7 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
-import 'package:news_app/services/LoadingNotifier.dart';
+import 'package:news_app/services/loading_notifier.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 

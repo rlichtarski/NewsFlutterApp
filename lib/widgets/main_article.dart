@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/widgets/display_articles.dart';
 
 class MainArticle extends StatelessWidget {
   const MainArticle({Key? key}) : super(key: key);
@@ -37,7 +38,8 @@ class MainArticle extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                'Articles title is here and now!',
+                  'Articles title is here and now!',
+                  maxLines: 2,
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0
@@ -67,11 +69,10 @@ class MainArticle extends StatelessWidget {
               ],
             ),
           ),
-          
         ],
       ),
     );
   }
 }
 
-//design from https://dribbble.com/shots/14905782/attachments/6619453?mode=media
+//design inspired from https://dribbble.com/shots/14905782/attachments/6619453?mode=media
