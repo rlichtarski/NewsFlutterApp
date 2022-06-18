@@ -26,71 +26,79 @@ class DisplayArticles extends ConsumerWidget {
               itemBuilder: (context, index) {
                 final Article article = snapshot.data![index];
                 if(index == 0) return MainArticle(article: article);
-                return Container(
-                  margin: const EdgeInsets.all(20.0),
-                  child: Row(
-                    children: [
-                      article.imageUrl != uploadImageError
-                        ? ClipRRect(
-                          child: CachedNetworkImage(
-                            imageUrl: article.imageUrl!,
-                            key: UniqueKey(),
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(color: Colors.black12,),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.black12,
-                              child: const Icon(
-                                Icons.broken_image,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          )
-                        : const Text('No image found!'),
-                      const SizedBox(width: 15,),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              article.title,
-                              textAlign: TextAlign.start,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  article.category,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(255, 149, 149, 158),
-                                    fontSize: 14.0
+                return GestureDetector(
+                  onTap: () {
+                    //navigate to an article screen
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(20.0),
+                    child: Row(
+                      children: [
+                        article.imageUrl != uploadImageError
+                          ? ClipRRect(
+                            child: Hero(
+                              tag: '${article.imageUrl}',
+                              child: CachedNetworkImage(
+                                imageUrl: article.imageUrl!,
+                                key: UniqueKey(),
+                                height: 80,
+                                width: 80,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => Container(color: Colors.black12,),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.black12,
+                                  child: const Icon(
+                                    Icons.broken_image,
+                                    color: Colors.black,
                                   ),
                                 ),
-                                Text(
-                                  article.timestamp,
-                                  style: const TextStyle(
-                                    color: Color.fromARGB(255, 149, 149, 158),
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: 14.0
-                                  ),
-
-                                ),
-                              ],
+                              ),
+                            ),
+                            borderRadius: BorderRadius.circular(20),
                             )
-                          ],
+                          : const Text('No image found!'),
+                        const SizedBox(width: 15,),
+                        Flexible(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                article.title,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 2,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    article.category,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 149, 149, 158),
+                                      fontSize: 14.0
+                                    ),
+                                  ),
+                                  Text(
+                                    article.timestamp,
+                                    style: const TextStyle(
+                                      color: Color.fromARGB(255, 149, 149, 158),
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 14.0
+                                    ),
+                
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 );
               }
