@@ -32,7 +32,6 @@ class UserHome extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 10,),
-              const MainArticle(),
               const Flexible(child: DisplayArticles())
             ],
           ),

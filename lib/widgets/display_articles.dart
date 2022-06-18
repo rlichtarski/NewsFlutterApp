@@ -5,6 +5,7 @@ import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/constants.dart';
 import 'package:news_app/widgets/empty_widget.dart';
+import 'package:news_app/widgets/main_article.dart';
 
 class DisplayArticles extends ConsumerWidget {
   const DisplayArticles({Key? key}) : super(key: key);
@@ -17,13 +18,14 @@ class DisplayArticles extends ConsumerWidget {
         if(snapshot.connectionState == ConnectionState.active && snapshot.data != null) {
           if(snapshot.data!.isEmpty) return const EmptyWidget();
           return SizedBox(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height,
             child: ListView.builder(
               itemCount: snapshot.data!.length,
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final Article article = snapshot.data![index];
+                if(index == 0) return MainArticle(article: article);
                 return Container(
                   margin: const EdgeInsets.all(20.0),
                   child: Row(
