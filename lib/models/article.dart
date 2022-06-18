@@ -2,6 +2,7 @@ class Article {
 
   final String title;
   final String description;
+  final String category;
   final String? imageUrl;
   final String timestamp;
   final String? id;
@@ -10,6 +11,7 @@ class Article {
     this.id,
     required this.title, 
     required this.description, 
+    required this.category,
     this.imageUrl,
     required this.timestamp
   });
@@ -18,6 +20,7 @@ class Article {
     'id': docId,
     'title': title,
     'description': description,
+    'category': category,
     'imageUrl': imageUrl,
     'timestamp': timestamp,
   };
@@ -26,6 +29,7 @@ class Article {
     'id': docId,
     'title': title,
     'description': description,
+    'category': category,
     'timestamp': timestamp,
   };
 
@@ -34,6 +38,7 @@ class Article {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
+      category: map['category'] ?? '',
       imageUrl: map['imageUrl'] ?? '',
       timestamp: map['timestamp'] ?? '',
     );

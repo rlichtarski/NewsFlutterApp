@@ -15,7 +15,7 @@ class UserTopBar extends StatelessWidget {
         leadingIconButton,
         const Spacer(),
         IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_bag)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark)),
       ],
 
     );

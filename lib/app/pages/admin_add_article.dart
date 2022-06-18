@@ -20,6 +20,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  final categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,12 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
               inputController: descriptionController, 
               hintText: "Article's description", 
               labelText: "Article's description"
+            ),
+            const SizedBox(height: 15),
+            CustomInputField(
+              inputController: categoryController, 
+              hintText: "Article's category", 
+              labelText: "Article's category"
             ),
             const SizedBox(height: 15),
             Consumer(
@@ -113,6 +120,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
+          category: categoryController.text,
           imageUrl: url,
           timestamp: formattedDate,
         )
@@ -122,6 +130,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
+          category: categoryController.text,
           timestamp: formattedDate,
         )
       );

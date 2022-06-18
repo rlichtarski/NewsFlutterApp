@@ -67,9 +67,9 @@ class DisplayArticles extends ConsumerWidget {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  'Technology',
-                                  style: TextStyle(
+                                Text(
+                                  article.category,
+                                  style: const TextStyle(
                                     color: Color.fromARGB(255, 149, 149, 158),
                                     fontSize: 14.0
                                   ),
