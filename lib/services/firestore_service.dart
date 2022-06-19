@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/models/user_data.dart';
 import 'package:news_app/utils/constants.dart';
 
 class FirestoreService {
@@ -9,6 +10,15 @@ class FirestoreService {
   FirestoreService({required this.uid});
 
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  Future<void> addUser(UserData user) async {
+    await firestore.collection('users').doc(user.uid).set(user.toMap());
+  }
+
+  Future<UserData?> getUser(String uid) async {
+    final doc = await firestore.collection('users').doc(uid).get();
+    return doc.exists ? UserData.fromMap(doc.data()!) : null;
+  }
 
   Future<void> addArticle(Article article) async {
     final docId = firestore
