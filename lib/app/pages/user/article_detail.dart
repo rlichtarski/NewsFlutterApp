@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
 import 'package:news_app/widgets/user_top_bar.dart';
 
@@ -25,9 +26,11 @@ class ArticleDetail extends ConsumerWidget {
                   },
                 ),
                 bookmarkIconButton: IconButton(
-                  icon: const Icon(Icons.bookmark_border),
+                  icon: ref.watch(savedArticlesProvider).isArticleSaved(article)
+                    ? const Icon(Icons.bookmark) 
+                    : const Icon(Icons.bookmark_border),
                   onPressed: () {
-                    //save the article to favorites
+                    ref.read(savedArticlesProvider).addArticle(article);
                   }, 
                 ),
               ),

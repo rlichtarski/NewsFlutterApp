@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:news_app/services/loading_notifier.dart';
 import 'package:news_app/services/firestore_service.dart';
 import 'package:news_app/services/storage_service.dart';
+import 'package:news_app/view_models/saved_articles_view_model.dart';
 
 final firebaseAuthProvider = Provider<FirebaseAuth>((ref) => FirebaseAuth.instance,);
 
@@ -27,4 +28,6 @@ final storageProvider = Provider<StorageService?>((ref) {
   return null;
 });
 
-final isLoadingProvider = ChangeNotifierProvider.autoDispose((ref) => LoadingNotifier());
+final isLoadingProvider = ChangeNotifierProvider.autoDispose((ref) => UIUpdatesNotifier());
+
+final savedArticlesProvider = ChangeNotifierProvider<SavedArticlesViewModel>((ref) => SavedArticlesViewModel());

@@ -11,7 +11,10 @@ class EmptyWidget extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          LottieBuilder.asset('assets/anim/empty.json'),
+          LottieBuilder.asset(
+            'assets/anim/empty.json',
+            repeat: false,
+          ),
           Text(text)
         ],
       ),

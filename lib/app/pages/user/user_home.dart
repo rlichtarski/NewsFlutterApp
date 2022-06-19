@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/app/pages/user/saved_articles_page.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/widgets/display_articles.dart';
 import 'package:news_app/widgets/main_article.dart';
@@ -26,7 +27,11 @@ class UserHome extends ConsumerWidget {
                 bookmarkIconButton: IconButton(
                   icon: const Icon(Icons.bookmarks),
                   onPressed: () {
-                    //navigate to favorites screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const SavedArticles()
+                      )
+                    );
                   },
                 ),
               ),
