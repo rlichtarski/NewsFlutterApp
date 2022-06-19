@@ -30,7 +30,13 @@ class ArticleDetail extends ConsumerWidget {
                     ? const Icon(Icons.bookmark) 
                     : const Icon(Icons.bookmark_border),
                   onPressed: () {
-                    ref.read(savedArticlesProvider).addArticle(article);
+                    if(ref.watch(savedArticlesProvider).isArticleSaved(article)) {
+                      ref.read(savedArticlesProvider).removeArticle(article);
+                      ref.read(databaseProvider)!.removeFavoriteArticle(article);
+                    } else {
+                      ref.read(savedArticlesProvider).addArticle(article);
+                      ref.read(databaseProvider)!.saveFavoriteArticle(article);
+                    }
                   }, 
                 ),
               ),

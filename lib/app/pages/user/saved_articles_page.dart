@@ -54,6 +54,7 @@ class SavedArticles extends ConsumerWidget {
                           SlidableAction(
                             onPressed: (context) {
                               ref.read(savedArticlesProvider).removeArticle(article);
+                              ref.read(databaseProvider)!.removeFavoriteArticle(article);
                               openIconSnackBar(
                                 context, 
                                 'Deleted from saved', 

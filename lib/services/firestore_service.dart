@@ -49,6 +49,22 @@ class FirestoreService {
         .update(article.toMap(article.id!));
   }
 
+  Future<void> saveFavoriteArticle(Article article) async => await firestore
+    .collection('users')
+    .doc(uid)
+    .collection('saved_articles')
+    .doc(article.id)
+    .set(
+      article.toMap(article.id!)
+    );
+
+  Future<void> removeFavoriteArticle(Article article) async => await firestore
+    .collection('users')
+    .doc(uid)
+    .collection('saved_articles')
+    .doc(article.id)
+    .delete();
+
   Stream<List<Article>> getArticles() => firestore
     .collection(articlesCol)
     .snapshots()
