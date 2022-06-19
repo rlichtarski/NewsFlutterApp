@@ -1,12 +1,14 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class UserTopBar extends StatelessWidget {
-  const UserTopBar({Key? key, required this.leadingIconButton}) : super(key: key);
+  const UserTopBar({
+    Key? key, 
+    required this.leadingIconButton,
+    required this.bookmarkIconButton,
+  }) : super(key: key);
 
   final IconButton leadingIconButton;
+  final IconButton bookmarkIconButton;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class UserTopBar extends StatelessWidget {
         leadingIconButton,
         const Spacer(),
         IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.bookmark)),
+        bookmarkIconButton
       ],
 
     );

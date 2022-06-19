@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app/app/pages/user/article_detail.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/constants.dart';
@@ -28,7 +29,13 @@ class DisplayArticles extends ConsumerWidget {
                 if(index == 0) return MainArticle(article: article);
                 return GestureDetector(
                   onTap: () {
-                    //navigate to an article screen
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ArticleDetail(
+                          article: article,
+                        ),
+                      )
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.all(20.0),
@@ -90,7 +97,6 @@ class DisplayArticles extends ConsumerWidget {
                                       fontWeight: FontWeight.w300,
                                       fontSize: 14.0
                                     ),
-                
                                   ),
                                 ],
                               )
