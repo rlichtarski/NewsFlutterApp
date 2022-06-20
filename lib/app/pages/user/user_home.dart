@@ -36,14 +36,6 @@ class UserHome extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 20,),
-              const Text(
-                'Your daily read',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              const SizedBox(height: 10,),
               const Flexible(child: DisplayArticles())
             ],
           ),

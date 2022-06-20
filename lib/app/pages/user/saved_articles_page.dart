@@ -60,9 +60,15 @@ class SavedArticles extends ConsumerWidget {
                         );
                       }
                       case ConnectionState.waiting: {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
+                         if(snapshot.data == null) {
+                            return const EmptyWidget(text: 'No articles saved...');
+                          }
+                          if(snapshot.data!.isEmpty) {
+                            return const EmptyWidget(text: 'No articles saved...');
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
                       }
                       case ConnectionState.done: {
                         return ListView.builder(

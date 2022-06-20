@@ -26,7 +26,22 @@ class DisplayArticles extends ConsumerWidget {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final Article article = snapshot.data![index];
-                if(index == 0) return MainArticle(article: article);
+                if(index == 0) { 
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                       const Text(
+                        'Your daily read',
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                      const SizedBox(height: 10,),
+                      MainArticle(article: article),
+                    ],
+                  );
+                }
                 return GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
@@ -38,7 +53,7 @@ class DisplayArticles extends ConsumerWidget {
                     );
                   },
                   child: Container(
-                    margin: const EdgeInsets.all(20.0),
+                    margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
                     child: Row(
                       children: [
                         article.imageUrl != uploadImageError
