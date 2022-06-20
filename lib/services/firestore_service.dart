@@ -65,6 +65,16 @@ class FirestoreService {
     .doc(article.id)
     .delete();
 
+  Future<List<Article>> getFavoriteArticles() => firestore
+    .collection('users')
+    .doc(uid)
+    .collection('saved_articles')
+    .get()
+    .then((snapshot) => snapshot.docs.map((doc) { 
+      final docData = doc.data();
+      return Article.fromMap(docData);
+    }).toList());
+
   Stream<List<Article>> getArticles() => firestore
     .collection(articlesCol)
     .snapshots()

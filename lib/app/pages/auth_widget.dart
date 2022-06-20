@@ -20,7 +20,6 @@ class AuthWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authStateChanges = ref.watch(authStateChangesProvider);
-    final firestoreDatabaseProvider = ref.watch(databaseProvider)!;
     return authStateChanges.when(
       data: (user) => user != null 
         ? user.email == adminEmail 

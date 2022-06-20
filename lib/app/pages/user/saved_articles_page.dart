@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:news_app/app/providers.dart';
+import 'package:news_app/models/article.dart';
 import 'package:news_app/utils/constants.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/empty_widget.dart';
+import 'package:news_app/widgets/saved_article_list_tile.dart';
 
 class SavedArticles extends ConsumerWidget {
   const SavedArticles({Key? key}) : super(key: key);
@@ -40,76 +42,46 @@ class SavedArticles extends ConsumerWidget {
                   ),
                 ],
               ),
-              savedArticlesViewModel.savedArticlesNotEmpty
-              ? Flexible(
-                child: ListView.builder(
-                  itemCount: savedArticlesViewModel.totalArticles,
-                  itemBuilder: ((context, index) {
-                    final article = savedArticlesViewModel.savedArticles[index];
-                    return Slidable(
-                      key: const Key('0'),
-                      endActionPane: ActionPane(
-                        motion: const ScrollMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
-                              ref.read(savedArticlesProvider).removeArticle(article);
-                              ref.read(databaseProvider)!.removeFavoriteArticle(article);
-                              openIconSnackBar(
-                                context, 
-                                'Deleted from saved', 
-                                const Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                ),
-                              );
-                            },
-                            backgroundColor: Colors.red,
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          )
-                        ],
-                      ),
-                      child: ListTile(
-                        leading: article.imageUrl != uploadImageError 
-                        ? ClipRRect(
-                          child: CachedNetworkImage(
-                            imageUrl: article.imageUrl!,
-                            key: UniqueKey(),
-                            height: 80,
-                            width: 80,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(color: Colors.black12,),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.black12,
-                              child: const Icon(
-                                Icons.broken_image,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          borderRadius: BorderRadius.circular(8),
-                          ) 
-                        : const Text('No image found!'),
-                        title: Text(
-                          article.title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(article.category),
-                            Text(article.timestamp),
-                          ],
-                        ),
-                      ),
-                    );
-                  })
-                )
+              const SizedBox(height: 10),
+              Flexible(
+                child: FutureBuilder(
+                  future: ref.read(databaseProvider)!.getFavoriteArticles(),
+                  builder: (context, AsyncSnapshot<List<Article>> snapshot) {
+                    if(snapshot.data == null) {
+                      return const EmptyWidget(text: 'No articles saved...');
+                    }
+                    if(snapshot.data!.isEmpty) {
+                      return const EmptyWidget(text: 'No articles saved...');
+                    }
+                    switch(snapshot.connectionState) {
+                      case ConnectionState.active: {
+                        return const Center(
+                          child: Text('Active connection'),
+                        );
+                      }
+                      case ConnectionState.waiting: {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      case ConnectionState.done: {
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: ((context, index) {
+                            final article = snapshot.data![index];
+                            return SavedArticleListTile(article: article);
+                          })
+                        );
+                      }
+                      case ConnectionState.none: {
+                        return const Center(
+                          child: Text('No saved articles'),
+                        );
+                      }
+                    }
+                  },
+                ),
               )
-              : const EmptyWidget(text: 'No articles saved...',)
             ],
           ),
         ),
