@@ -26,9 +26,19 @@ class ArticleDetail extends ConsumerWidget {
                   },
                 ),
                 bookmarkIconButton: IconButton(
-                  icon: ref.watch(savedArticlesProvider).isArticleSaved(article)
-                    ? const Icon(Icons.bookmark) 
-                    : const Icon(Icons.bookmark_border),
+                  icon: FutureBuilder(
+                    future: ref.watch(databaseProvider)!.checkIfArticleSaved(article.id!),
+                    builder: (context, AsyncSnapshot<bool> snapshot) {
+                      if(snapshot.data == null) {
+                        return const Icon(Icons.bookmark_border);
+                      }
+                      if(snapshot.connectionState == ConnectionState.done) {
+                        return snapshot.data! ? const Icon(Icons.bookmark) 
+                        : const Icon(Icons.bookmark_border);
+                      }
+                      return const Icon(Icons.bookmark_border);
+                    },
+                  ),
                   onPressed: () {
                     if(ref.watch(savedArticlesProvider).isArticleSaved(article)) {
                       ref.read(savedArticlesProvider).removeArticle(article);

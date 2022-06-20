@@ -75,6 +75,16 @@ class FirestoreService {
       return Article.fromMap(docData);
     }).toList());
 
+  Future<bool> checkIfArticleSaved(String docId) async {
+    var collectionRef = firestore
+      .collection('users')
+      .doc(uid)
+      .collection('saved_articles');
+
+    var doc = await collectionRef.doc(docId).get();
+    return doc.exists;
+  }
+
   Stream<List<Article>> getArticles() => firestore
     .collection(articlesCol)
     .snapshots()
