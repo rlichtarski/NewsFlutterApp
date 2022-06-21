@@ -49,7 +49,7 @@ class FirestoreService {
         .update(article.toMap(article.id!));
   }
 
-  Future<void> saveFavoriteArticle(Article article) async => firestore
+  Future<void> saveFavoriteArticle(Article article) async => await firestore
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
@@ -58,19 +58,19 @@ class FirestoreService {
       article.toMap(article.id!)
     );
 
-  Future<void> removeFavoriteArticle(Article article) async => firestore
+  Future<void> removeFavoriteArticle(Article article) async => await firestore
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
     .doc(article.id)
     .delete();
 
-  Future<List<Article>> getFavoriteArticles() => firestore
+  Stream<List<Article>> getFavoriteArticles() => firestore
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
-    .get()
-    .then((snapshot) => snapshot.docs.map((doc) { 
+    .snapshots()
+    .map((snapshot) => snapshot.docs.map((doc) { 
       final docData = doc.data();
       return Article.fromMap(docData);
     }).toList());

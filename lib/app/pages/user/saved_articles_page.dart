@@ -43,8 +43,8 @@ class SavedArticles extends ConsumerWidget {
               ),
               const SizedBox(height: 10),
               Flexible(
-                child: FutureBuilder(
-                  future: ref.read(databaseProvider)!.getFavoriteArticles(),
+                child: StreamBuilder(
+                  stream: ref.read(databaseProvider)!.getFavoriteArticles(),
                   builder: (context, AsyncSnapshot<List<Article>> snapshot) {
                     if(snapshot.data == null) {
                       return const EmptyWidget(text: 'No articles saved...');
@@ -54,8 +54,12 @@ class SavedArticles extends ConsumerWidget {
                     }
                     switch(snapshot.connectionState) {
                       case ConnectionState.active: {
-                        return const Center(
-                          child: Text('Active connection'),
+                        return ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: ((context, index) {
+                            final article = snapshot.data![index];
+                            return SavedArticleListTile(article: article);
+                          })
                         );
                       }
                       case ConnectionState.waiting: {
@@ -70,12 +74,8 @@ class SavedArticles extends ConsumerWidget {
                           );
                       }
                       case ConnectionState.done: {
-                        return ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: ((context, index) {
-                            final article = snapshot.data![index];
-                            return SavedArticleListTile(article: article);
-                          })
+                        return const Center(
+                          child: Text('Done')
                         );
                       }
                       case ConnectionState.none: {
