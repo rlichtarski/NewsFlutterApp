@@ -26,27 +26,28 @@ class ArticleDetail extends ConsumerWidget {
                   },
                 ),
                 bookmarkIconButton: IconButton(
-                  icon: FutureBuilder(
-                    future: ref.watch(databaseProvider)!.checkIfArticleSaved(article.id!),
-                    builder: (context, AsyncSnapshot<bool> snapshot) {
-                      if(snapshot.data == null) {
+                  icon: StreamBuilder(
+                    stream: ref.watch(databaseProvider)!.checkIfArticleSavedStream(article.id!),
+                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                      if(snapshot.data == null || !(snapshot.hasData) || !(snapshot.data!.exists)) {
                         return const Icon(Icons.bookmark_border);
                       }
-                      if(snapshot.connectionState == ConnectionState.done) {
-                        return snapshot.data! ? const Icon(Icons.bookmark) 
-                        : const Icon(Icons.bookmark_border);
-                      }
-                      return const Icon(Icons.bookmark_border);
+                      return const Icon(Icons.bookmark);
                     },
                   ),
                   onPressed: () {
-                    if(ref.watch(savedArticlesProvider).isArticleSaved(article)) {
-                      ref.read(savedArticlesProvider).removeArticle(article);
-                      ref.read(databaseProvider)!.removeFavoriteArticle(article);
-                    } else {
-                      ref.read(savedArticlesProvider).addArticle(article);
-                      ref.read(databaseProvider)!.saveFavoriteArticle(article);
-                    }
+                    ref.watch(databaseProvider)!
+                      .checkIfArticleSaved(article.id!)
+                      .then((isArticleSaved) {
+                        if(isArticleSaved) {
+                          ref.read(databaseProvider)!.removeFavoriteArticle(article);
+                          ref.read(savedArticlesProvider).removeArticle(article);
+                        } else {
+                          ref.read(databaseProvider)!.saveFavoriteArticle(article);
+                          ref.read(savedArticlesProvider).addArticle(article);
+                        }
+                      }
+                    );
                   }, 
                 ),
               ),

@@ -49,7 +49,7 @@ class FirestoreService {
         .update(article.toMap(article.id!));
   }
 
-  Future<void> saveFavoriteArticle(Article article) async => await firestore
+  Future<void> saveFavoriteArticle(Article article) async => firestore
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
@@ -58,7 +58,7 @@ class FirestoreService {
       article.toMap(article.id!)
     );
 
-  Future<void> removeFavoriteArticle(Article article) async => await firestore
+  Future<void> removeFavoriteArticle(Article article) async => firestore
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
@@ -83,6 +83,15 @@ class FirestoreService {
 
     var doc = await collectionRef.doc(docId).get();
     return doc.exists;
+  }
+
+  Stream<dynamic> checkIfArticleSavedStream(String docId) {
+    return firestore
+      .collection('users')
+      .doc(uid)
+      .collection('saved_articles')
+      .doc(docId)
+      .snapshots();
   }
 
   Stream<List<Article>> getArticles() => firestore

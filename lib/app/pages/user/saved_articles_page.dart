@@ -14,7 +14,6 @@ class SavedArticles extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final savedArticlesViewModel = ref.watch(savedArticlesProvider);
     return Scaffold(
       body: SafeArea(
         child: Padding(
