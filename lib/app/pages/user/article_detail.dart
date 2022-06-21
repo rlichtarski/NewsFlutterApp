@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/user_top_bar.dart';
 
 class ArticleDetail extends ConsumerWidget {
@@ -42,9 +43,25 @@ class ArticleDetail extends ConsumerWidget {
                         if(isArticleSaved) {
                           ref.read(databaseProvider)!.removeFavoriteArticle(article);
                           ref.read(savedArticlesProvider).removeArticle(article);
+                          openIconSnackBar(
+                            context, 
+                            'Deleted the article from favorites', 
+                            const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            )
+                          );
                         } else {
                           ref.read(databaseProvider)!.saveFavoriteArticle(article);
                           ref.read(savedArticlesProvider).addArticle(article);
+                          openIconSnackBar(
+                            context, 
+                            'Added the article to favorites', 
+                            const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                            )
+                          );
                         }
                       }
                     );
@@ -54,21 +71,18 @@ class ArticleDetail extends ConsumerWidget {
               const SizedBox(height: 15,),
               Hero(
                 tag: '${article.imageUrl}',
-                child: AspectRatio(
-                  aspectRatio: 3 / 2,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30.0),
-                    child: CachedNetworkImage(
-                      imageUrl: article.imageUrl!,
-                      key: UniqueKey(),
-                      fit: BoxFit.fitWidth,
-                      placeholder: (context, url) => Container(color: Colors.black12,),
-                      errorWidget: (context, url, error) => const SizedBox(
-                        child: Icon(
-                          Icons.broken_image,
-                          size: 100,
-                          color: Colors.black38,
-                        ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: CachedNetworkImage(
+                    imageUrl: article.imageUrl!,
+                    key: UniqueKey(),
+                    fit: BoxFit.fitWidth,
+                    placeholder: (context, url) => Container(color: Colors.black12,),
+                    errorWidget: (context, url, error) => const SizedBox(
+                      child: Icon(
+                        Icons.broken_image,
+                        size: 100,
+                        color: Colors.black38,
                       ),
                     ),
                   ),

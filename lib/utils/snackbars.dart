@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 openIconSnackBar(context, String text, Widget icon) {
-  ScaffoldMessenger.of(context).showSnackBar( 
+  ScaffoldMessenger.of(context)
+  ..removeCurrentSnackBar()
+  ..showSnackBar( 
     SnackBar(
       backgroundColor: Colors.green,
       content: Row(
