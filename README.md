@@ -11,12 +11,14 @@ A news app made with Flutter, [Riverpod](https://riverpod.dev/) and [Firebase](h
 - [lottie](https://pub.dev/packages/lottie) - for animations
 - [cached_network_image](https://pub.dev/packages/cached_network_image) - for showing an image and keeping it in the cache directory
 
-## Preview of the app:
+# Preview of the app:
+## User side: 
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/articles_user.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/btc_article.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/saved_articles.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/delete_saved_article.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/saved_articles_empty.png)
+## Admin side:
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_home.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_delete_article.png)
 ![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_add_article.png)
