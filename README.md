@@ -1,16 +1,23 @@
-# news_app
+# NewsFlutterApp
+A news app made with Flutter, [Riverpod](https://riverpod.dev/) and [Firebase](https://firebase.flutter.dev/) (Authentication, Cloud Firestore, Cloud Storage). The app is divided into two parts - admin side and user side. The admin is able to add, edit, delete articles and user is able to read and add the article to favorites. 
 
-A new Flutter project.
+## The app is made with:
+- [Riverpod](https://pub.dev/packages/flutter_riverpod) - for state management
+- [firebase_auth](https://pub.dev/packages/firebase_auth) - for authentication
+- [cloud_firestore](https://pub.dev/packages/cloud_firestore) - for creating, reading, updating and deleting articles and favorite articles
+- [firebase_storage](https://pub.dev/packages/firebase_storage) - for saving article's images
+- [image_picker](https://pub.dev/packages/image_picker) - for picking an image for an article from a mobile device's image library
+- [flutter_slidable](https://pub.dev/packages/flutter_slidable) - for slidable list item with directional slide actions
+- [lottie](https://pub.dev/packages/lottie) - for animations
+- [cached_network_image](https://pub.dev/packages/cached_network_image) - for showing an image and keeping it in the cache directory
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Preview of the app:
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/articles_user.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/btc_article.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/saved_articles.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/delete_saved_article.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/saved_articles_empty.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_home.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_delete_article.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_add_article.png)
+![](https://github.com/rradzzio/NewsFlutterApp/blob/main/admin_edit_article.png)
