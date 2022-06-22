@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:news_app/services/connectivity_notifier.dart';
 import 'package:news_app/services/loading_notifier.dart';
 import 'package:news_app/services/firestore_service.dart';
 import 'package:news_app/services/storage_service.dart';
@@ -31,3 +32,5 @@ final storageProvider = Provider<StorageService?>((ref) {
 final isLoadingProvider = ChangeNotifierProvider.autoDispose((ref) => UIUpdatesNotifier());
 
 final savedArticlesProvider = ChangeNotifierProvider<SavedArticlesViewModel>((ref) => SavedArticlesViewModel());
+
+final connectivityNotifierProvider = ChangeNotifierProvider<ConnectivityNotifier>((ref) => ConnectivityNotifier());
