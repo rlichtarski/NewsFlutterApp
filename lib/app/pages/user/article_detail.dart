@@ -45,7 +45,7 @@ class ArticleDetail extends ConsumerWidget {
                           ref.read(savedArticlesProvider).removeArticle(article);
                           openIconSnackBar(
                             context, 
-                            'Deleted the article from favorites', 
+                            'Removed the article from favorites', 
                             const Icon(
                               Icons.check,
                               color: Colors.white,
