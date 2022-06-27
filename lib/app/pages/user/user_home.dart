@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:news_app/app/pages/categories_page.dart';
 import 'package:news_app/app/pages/user/saved_articles_page.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/widgets/display_articles.dart';
@@ -23,6 +24,14 @@ class UserHome extends ConsumerWidget {
                 leadingIconButton: IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () => ref.read(firebaseAuthProvider).signOut(),
+                ),
+                menuIconButton: IconButton(
+                  icon: const Icon(Icons.menu),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const CategoriesPage())
+                    );
+                  },
                 ),
                 bookmarkIconButton: IconButton(
                   icon: const Icon(Icons.bookmarks),

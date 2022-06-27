@@ -26,6 +26,19 @@ class FirestoreService {
       .doc()
       .id;
 
+    // if(article.imageUrl == null) {
+    //   await firestore
+    //     .collection(articlesCol)
+    //     .doc(docId)
+    //     .set(article.toMapNoImage(docId));
+    //   await addArticleToCategory(article, docId);
+    // } else {
+    //   await firestore
+    //     .collection(articlesCol)
+    //     .doc(docId)
+    //     .set(article.toMap(docId));
+    // }
+
     article.imageUrl == null ?
       await firestore
         .collection(articlesCol)
@@ -35,6 +48,8 @@ class FirestoreService {
         .collection(articlesCol)
         .doc(docId)
         .set(article.toMap(docId));
+
+    await addArticleToCategory(article, docId);
   }
 
   Future<void> editArticle(Article article) async {
@@ -58,6 +73,17 @@ class FirestoreService {
       article.toMap(article.id!)
     );
 
+  Future<void> addArticleToCategory(Article article, String articleId) async {
+    await firestore
+      .collection('categories')
+      .doc(article.category)
+      .collection('categoryArticles')
+      .doc(articleId)
+      .set(
+        article.toMap(articleId)
+      );
+  }
+
   Future<void> removeFavoriteArticle(Article article) async => await firestore
     .collection('users')
     .doc(uid)
@@ -69,6 +95,16 @@ class FirestoreService {
     .collection('users')
     .doc(uid)
     .collection('saved_articles')
+    .snapshots()
+    .map((snapshot) => snapshot.docs.map((doc) { 
+      final docData = doc.data();
+      return Article.fromMap(docData);
+    }).toList());
+
+  Stream<List<Article>> getArticlesByCategory(String category) => firestore
+    .collection('categories')
+    .doc(category)
+    .collection('categoryArticles')
     .snapshots()
     .map((snapshot) => snapshot.docs.map((doc) { 
       final docData = doc.data();

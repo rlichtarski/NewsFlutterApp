@@ -4,10 +4,12 @@ class UserTopBar extends StatelessWidget {
   const UserTopBar({
     Key? key, 
     required this.leadingIconButton,
+    this.menuIconButton,
     required this.bookmarkIconButton,
   }) : super(key: key);
 
   final IconButton leadingIconButton;
+  final IconButton? menuIconButton;
   final IconButton bookmarkIconButton;
 
   @override
@@ -16,8 +18,8 @@ class UserTopBar extends StatelessWidget {
       children: [
         leadingIconButton,
         const Spacer(),
-        IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
-        bookmarkIconButton
+        menuIconButton ?? const SizedBox(),
+        bookmarkIconButton 
       ],
 
     );
