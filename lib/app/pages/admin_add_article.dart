@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
+import 'package:news_app/utils/constants.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 
@@ -20,7 +21,6 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +45,45 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
               labelText: "Article's description"
             ),
             const SizedBox(height: 15),
-            CustomInputField(
-              inputController: categoryController, 
-              hintText: "Article's category", 
-              labelText: "Article's category"
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  "Article's category: ",
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                ),
+                const SizedBox(width: 10,),
+                Consumer(
+                  builder: ((context, ref, child) {
+                    final dropdownProvider = ref.watch(uiChangesProvider);
+                    return DropdownButton<String>(
+                      value: dropdownProvider.articleCategory,
+                      icon: const Icon(
+                        Icons.arrow_downward,
+                        color: Colors.black54,
+                      ),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.black45,
+                      ),
+                      onChanged: (newValue) {
+                        dropdownProvider.setArticleCategory('$newValue');
+                      },
+                      items: categoriesList
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+              ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 25),
             Consumer(
               builder: (context, ref, child) {
                 final image = ref.watch(pickImageProvider);
@@ -79,23 +112,25 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
               ),
               )
             ),
-            const Spacer(),
-            Consumer(
-              builder: (context, ref, child) {
-                final loadingNotifier = ref.watch(isLoadingProvider);
-                return loadingNotifier.loading 
-                  ? const Padding(
-                    padding: EdgeInsets.all(6.0),
-                    child: CircularProgressIndicator(),
-                  )
-                  : ElevatedButton(
-                    onPressed: () { 
-                      ref.read(isLoadingProvider).isLoading(true);
-                      _addArticle(); 
-                    }, 
-                    child: const Text('Add the article')
-                  );
-              },
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Consumer(
+                builder: (context, ref, child) {
+                  final loadingNotifier = ref.watch(uiChangesProvider);
+                  return loadingNotifier.loading 
+                    ? const Padding(
+                      padding: EdgeInsets.all(6.0),
+                      child: CircularProgressIndicator(),
+                    )
+                    : ElevatedButton(
+                      onPressed: () { 
+                        ref.read(uiChangesProvider).isLoading(true);
+                        _addArticle(); 
+                      }, 
+                      child: const Text('Add the article')
+                    );
+                },
+              ),
             ),
           ],
         ),
@@ -107,6 +142,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
     final firestoreDB = ref.read(databaseProvider);
     final imagePicker = ref.read(pickImageProvider);
     final storage = ref.read(storageProvider);
+    final category = ref.read(uiChangesProvider).articleCategory;
 
     if(firestoreDB == null || storage == null) return;
 
@@ -120,7 +156,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
-          category: categoryController.text,
+          category: category,
           imageUrl: url,
           timestamp: formattedDate,
         )
@@ -130,7 +166,7 @@ class _AdminAddArticlePageState extends ConsumerState<AdminAddArticlePage> {
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
-          category: categoryController.text,
+          category: category,
           timestamp: formattedDate,
         )
       );

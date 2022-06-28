@@ -42,6 +42,9 @@ class AdminHome extends ConsumerWidget {
                       .read(databaseProvider)!
                       .deleteArticle(article.id!);
                     ref
+                      .read(databaseProvider)!
+                      .deleteArticleFromCategories(article.id!, article.category);
+                    ref
                       .read(storageProvider)!
                       .deleteImage(article.imageUrl!);
                     openIconSnackBar(

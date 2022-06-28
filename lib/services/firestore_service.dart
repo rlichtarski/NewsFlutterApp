@@ -26,21 +26,8 @@ class FirestoreService {
       .doc()
       .id;
 
-    // if(article.imageUrl == null) {
-    //   await firestore
-    //     .collection(articlesCol)
-    //     .doc(docId)
-    //     .set(article.toMapNoImage(docId));
-    //   await addArticleToCategory(article, docId);
-    // } else {
-    //   await firestore
-    //     .collection(articlesCol)
-    //     .doc(docId)
-    //     .set(article.toMap(docId));
-    // }
-
-    article.imageUrl == null ?
-      await firestore
+    checkIfArticleImageIsNull(article) 
+      ? await firestore
         .collection(articlesCol)
         .doc(docId)
         .set(article.toMapNoImage(docId))
@@ -52,8 +39,8 @@ class FirestoreService {
     await addArticleToCategory(article, docId);
   }
 
-  Future<void> editArticle(Article article) async {
-    article.imageUrl == null 
+  Future<void> editArticle(Article article, String oldCategory) async {
+    checkIfArticleImageIsNull(article) 
       ? await firestore
         .collection(articlesCol)
         .doc(article.id)
@@ -62,6 +49,8 @@ class FirestoreService {
         .collection(articlesCol)
         .doc(article.id)
         .update(article.toMap(article.id!));
+
+    if(article.category != oldCategory) await editArticleCategory(article, oldCategory);
   }
 
   Future<void> saveFavoriteArticle(Article article) async => await firestore
@@ -74,7 +63,16 @@ class FirestoreService {
     );
 
   Future<void> addArticleToCategory(Article article, String articleId) async {
-    await firestore
+    checkIfArticleImageIsNull(article) ?
+      await firestore
+        .collection('categories')
+        .doc(article.category)
+        .collection('categoryArticles')
+        .doc(articleId)
+        .set(
+          article.toMapNoImage(articleId)
+        )
+    : await firestore
       .collection('categories')
       .doc(article.category)
       .collection('categoryArticles')
@@ -82,6 +80,17 @@ class FirestoreService {
       .set(
         article.toMap(articleId)
       );
+  }
+
+  Future<void> editArticleCategory(Article article, String oldCategory) async {
+      await firestore
+        .collection('categories')
+        .doc(oldCategory)
+        .collection('categoryArticles')
+        .doc(article.id)
+        .delete();
+      
+      await addArticleToCategory(article, article.id!);
   }
 
   Future<void> removeFavoriteArticle(Article article) async => await firestore
@@ -142,6 +151,15 @@ class FirestoreService {
     .collection(articlesCol)
     .doc(id)
     .delete();
+
+  Future<void> deleteArticleFromCategories(String id, String category) async => await firestore
+    .collection('categories')
+    .doc(category)
+    .collection('categoryArticles')
+    .doc(id)
+    .delete();
+
+  bool checkIfArticleImageIsNull(Article article) => article.imageUrl == null; 
 
 }
 

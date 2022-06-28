@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/services/connectivity_notifier.dart';
-import 'package:news_app/services/loading_notifier.dart';
+import 'package:news_app/services/ui_changes_notifier.dart';
 import 'package:news_app/services/firestore_service.dart';
 import 'package:news_app/services/storage_service.dart';
 import 'package:news_app/view_models/saved_articles_view_model.dart';
@@ -29,7 +29,7 @@ final storageProvider = Provider<StorageService?>((ref) {
   return null;
 });
 
-final isLoadingProvider = ChangeNotifierProvider.autoDispose((ref) => UIUpdatesNotifier());
+final uiChangesProvider = ChangeNotifierProvider.autoDispose((ref) => UIUpdatesNotifier());
 
 final savedArticlesProvider = ChangeNotifierProvider<SavedArticlesViewModel>((ref) => SavedArticlesViewModel());
 

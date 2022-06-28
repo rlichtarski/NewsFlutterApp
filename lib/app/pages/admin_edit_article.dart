@@ -6,7 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:news_app/app/providers.dart';
 import 'package:news_app/models/article.dart';
-import 'package:news_app/services/loading_notifier.dart';
+import 'package:news_app/services/ui_changes_notifier.dart';
+import 'package:news_app/utils/constants.dart';
 import 'package:news_app/utils/snackbars.dart';
 import 'package:news_app/widgets/input_field.dart';
 
@@ -23,7 +24,6 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
 
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,12 +50,45 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
               labelText: "Article's description"
             ),
             const SizedBox(height: 15),
-            CustomInputField(
-              inputController: categoryController, 
-              hintText: "Article's category", 
-              labelText: "Article's category"
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Text(
+                  "Article's category: ",
+                  style: TextStyle(
+                    color: Colors.black54
+                  ),
+                ),
+                const SizedBox(width: 10,),
+                Consumer(
+                  builder: ((context, ref, child) {
+                    final dropdownProvider = ref.watch(uiChangesProvider);
+                    return DropdownButton<String>(
+                      value: dropdownProvider.articleCategory,
+                      icon: const Icon(
+                        Icons.arrow_downward,
+                        color: Colors.black54,
+                      ),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.black45,
+                      ),
+                      onChanged: (newValue) {
+                        dropdownProvider.setArticleCategory('$newValue');
+                      },
+                      items: categoriesList
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    );
+                  }),
+                ),
+              ],
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 25),
             Consumer(
               builder: (context, ref, child) {
                 final image = ref.watch(pickImageProvider);
@@ -99,7 +132,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
             const Spacer(),
             Consumer(
               builder: (context, ref, child) {
-                final loadingNotifier = ref.watch(isLoadingProvider);
+                final loadingNotifier = ref.watch(uiChangesProvider);
                 return loadingNotifier.loading 
                   ? const Padding(
                     padding: EdgeInsets.all(6.0),
@@ -107,7 +140,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
                   )
                   : ElevatedButton(
                     onPressed: () { 
-                      ref.read(isLoadingProvider).isLoading(true);
+                      ref.read(uiChangesProvider).isLoading(true);
                       _editArticle(); 
                     }, 
                     child: const Text('Edit the article')
@@ -124,6 +157,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
     final firestoreDB = ref.read(databaseProvider);
     final imagePicker = ref.read(pickImageProvider);
     final storage = ref.read(storageProvider);
+    final category = ref.read(uiChangesProvider).articleCategory;
 
     if(firestoreDB == null || storage == null) return;
 
@@ -137,21 +171,23 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
-          category: categoryController.text,
+          category: category,
           imageUrl: url,
           timestamp: formattedDate,
           id: widget.article.id
-        )
+        ),
+        widget.article.category
       );
     } else {
       await firestoreDB.editArticle(
         Article(
           title: titleController.text, 
           description: descriptionController.text, 
-          category: categoryController.text,
+          category: category,
           timestamp: formattedDate,
           id: widget.article.id
-        )
+        ),
+        widget.article.category
       );
     }
     openIconSnackBar(
@@ -170,7 +206,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
     if(article != null) {
       titleController.text = article.title;
       descriptionController.text = article.description;
-      categoryController.text = article.category;
+      ref.read(uiChangesProvider).setArticleCategory(article.category);
     }
   }
 
