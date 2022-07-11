@@ -37,6 +37,7 @@ class FirestoreService {
         .set(article.toMap(docId));
 
     await addArticleToCategory(article, docId);
+    await addCategoryToList(article.category);
   }
 
   Future<void> editArticle(Article article, String oldCategory) async {
@@ -61,6 +62,38 @@ class FirestoreService {
     .set(
       article.toMap(article.id!)
     );
+
+  Future<void> addCategoryToList(String category) async {
+    final categoriesListDocCheck = await firestore
+      .collection('categories')
+      .doc('categoriesList')
+      .get();
+
+    if(!categoriesListDocCheck.exists) {
+      await firestore
+        .collection('categories')
+        .doc('categoriesList')
+        .set({
+          'categories': []
+        });
+    }
+    
+    final categoriesListDoc = await firestore
+      .collection('categories')
+      .doc('categoriesList')
+      .get();
+
+    List<String> categoriesList = List.from(categoriesListDoc.data()?['categories']);
+    categoriesList.add(category);
+
+    await firestore
+      .collection('categories')
+      .doc('categoriesList')
+      .update({
+        'categories': categoriesList
+      });
+
+  }
 
   Future<void> addArticleToCategory(Article article, String articleId) async {
     checkIfArticleImageIsNull(article) ?
@@ -119,6 +152,18 @@ class FirestoreService {
       final docData = doc.data();
       return Article.fromMap(docData);
     }).toList());
+
+  Future<List<String>> getCategories() async {
+    List<String> categories = [];
+
+    final categoriesListDoc = await firestore
+      .collection('categories')
+      .doc('categoriesList')
+      .get();
+
+    categories = List.from(categoriesListDoc.data()?['categories']);
+    return categories;
+  }
 
   Future<bool> checkIfArticleSaved(String docId) async {
     var collectionRef = firestore
