@@ -26,6 +26,14 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
   final descriptionController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    titleController.text = widget.article.title;
+    descriptionController.text = widget.article.description;
+    ref.read(uiChangesProvider).setArticleCategory(widget.article.category);
+  }
+
+  @override
   Widget build(BuildContext context) {
     setTextControllers(widget.article);
     return Scaffold(
@@ -215,9 +223,7 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
   
   void setTextControllers(Article? article) {
     if(article != null) {
-      titleController.text = article.title;
-      descriptionController.text = article.description;
-      ref.watch(uiChangesProvider).setArticleCategory(article.category); //this!
+      //ref.watch(uiChangesProvider).setArticleCategory(article.category); //this!
     }
   }
 
