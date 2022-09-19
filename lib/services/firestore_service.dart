@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:news_app/models/article.dart';
 import 'package:news_app/models/user_data.dart';
 import 'package:news_app/utils/constants.dart';
@@ -36,8 +37,8 @@ class FirestoreService {
         .doc(docId)
         .set(article.toMap(docId));
 
-    await addArticleToCategory(article, docId);
     await addCategoryToList(article.category);
+    await addArticleToCategory(article, docId);
   }
 
   Future<void> editArticle(Article article, String oldCategory) async {
@@ -51,7 +52,7 @@ class FirestoreService {
         .doc(article.id)
         .update(article.toMap(article.id!));
 
-    if(article.category != oldCategory) await editArticleCategory(article, oldCategory);
+    if (article.category != oldCategory) await editArticleCategory(article, oldCategory);
   }
 
   Future<void> saveFavoriteArticle(Article article) async => await firestore
@@ -69,7 +70,7 @@ class FirestoreService {
       .doc('categoriesList')
       .get();
 
-    if(!categoriesListDocCheck.exists) {
+    if (!categoriesListDocCheck.exists) {
       await firestore
         .collection('categories')
         .doc('categoriesList')
@@ -83,15 +84,18 @@ class FirestoreService {
       .doc('categoriesList')
       .get();
 
-    List<String> categoriesList = List.from(categoriesListDoc.data()?['categories']);
-    categoriesList.add(category);
+    List<String> categoriesListFromFirebase = List.from(categoriesListDoc.data()?['categories']);
+    List<String> categoriesList = categoriesListFromFirebase;
+    if (!categoriesList.contains(category)) categoriesList.add(category);
 
-    await firestore
-      .collection('categories')
-      .doc('categoriesList')
-      .update({
-        'categories': categoriesList
-      });
+    if (ListEquality<String>().equals(categoriesListFromFirebase, categoriesList)) {
+      await firestore
+        .collection('categories')
+        .doc('categoriesList')
+        .update({
+          'categories': categoriesList
+        });
+    }
 
   }
 
@@ -123,6 +127,7 @@ class FirestoreService {
         .doc(article.id)
         .delete();
       
+      await addCategoryToList(article.category);
       await addArticleToCategory(article, article.id!);
   }
 
