@@ -52,7 +52,7 @@ class FirestoreService {
         .doc(article.id)
         .update(article.toMap(article.id!));
 
-    if (article.category != oldCategory) await editArticleCategory(article, oldCategory);
+    await editArticleCategory(article, oldCategory);
   }
 
   Future<void> saveFavoriteArticle(Article article) async => await firestore
@@ -120,15 +120,38 @@ class FirestoreService {
   }
 
   Future<void> editArticleCategory(Article article, String oldCategory) async {
+    String category = oldCategory;
+
+    if (article.category != oldCategory) {
+      category = article.category;
+      await addCategoryToList(category);  
       await firestore
         .collection('categories')
         .doc(oldCategory)
         .collection('categoryArticles')
         .doc(article.id)
         .delete();
-      
-      await addCategoryToList(article.category);
       await addArticleToCategory(article, article.id!);
+      return;
+    }
+
+    checkIfArticleImageIsNull(article) ?
+      await firestore
+        .collection('categories')
+        .doc(category)
+        .collection('categoryArticles')
+        .doc(article.id)
+        .update(
+          article.toMapNoImage(article.id!)
+        )
+    : await firestore
+      .collection('categories')
+      .doc(category)
+      .collection('categoryArticles')
+      .doc(article.id)
+      .update(
+        article.toMap(article.id!)
+      );
   }
 
   Future<void> removeFavoriteArticle(Article article) async => await firestore

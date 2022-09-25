@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,6 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-    setTextControllers(widget.article);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -220,16 +220,9 @@ class _AdminEditArticlePageState extends ConsumerState<AdminEditArticlePage> {
 
     Navigator.pop(context);
   }
-  
-  void setTextControllers(Article? article) {
-    if(article != null) {
-      //ref.watch(uiChangesProvider).setArticleCategory(article.category); //this!
-    }
-  }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     titleController.dispose();
     descriptionController.dispose();
